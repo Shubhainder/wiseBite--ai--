@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "ConsumeWise-SS",
+  "version": "1.0",
+  "description": "Enhance transparency in consumer goods by providing verifiable & personalised information about their impact on health, environment, and society.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs"
+    ],
+  "host_permissions": [
+    "https://*.amazon.in/*",
+    "https://*.flipkart.com/*",
+    "https://*.blinkit.com/*",
+    "https://*.zomato.com/*",
+    "https://*.swiggy.com/*"
+  ],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
