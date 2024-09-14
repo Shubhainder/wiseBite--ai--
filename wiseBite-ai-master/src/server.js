@@ -13,7 +13,9 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const genAI = new GoogleGenerativeAI('your gemini api');
+const gemini_api = process.env.GEMINI_API_KEY;
+
+const genAI = new GoogleGenerativeAI(gemini_api);
 
 function scrapeData(html, hostname) {
   const $ = cheerio.load(html);
