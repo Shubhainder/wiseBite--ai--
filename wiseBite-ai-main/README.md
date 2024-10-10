@@ -1,5 +1,9 @@
 # wiseBite chrome extension
 
+### Fine-tune - 10 oct 2024
+Adding DB for natural alternate products ( under contstruction)
+Adding Upload image feature 
+Adding Question by user feature
 
 
 

@@ -1,20 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "ConsumeWise-SS",
+  "name": "WiseBite",
   "version": "1.0",
-  "description": "Enhance transparency in consumer goods by providing verifiable & personalised information about their impact on health, environment, and society.",
+  "description": "Know what you Consume.",
   "permissions": [
     "activeTab",
-    "scripting",
-    "tabs"
+    "storage"
     ],
-  "host_permissions": [
-    "https://*.amazon.in/*",
-    "https://*.flipkart.com/*",
-    "https://*.blinkit.com/*",
-    "https://*.zomato.com/*",
-    "https://*.swiggy.com/*"
-  ],
+ 
   "action": {
     "default_popup": "index.html"
   },

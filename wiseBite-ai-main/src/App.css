@@ -183,3 +183,7 @@ button:disabled {
   text-align: center;
   color: #000;
 }
+
+.upload-btn{
+  cursor: pointer;
+}
