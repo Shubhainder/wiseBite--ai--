@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { findNaturalAlternatives, Alternative } from "./db";
+import { findNaturalAlternatives, Alternative, initializeDB } from "./db";
 
 const storedKeywords = [
   "Peanut Butter",
@@ -8,7 +8,7 @@ const storedKeywords = [
   "Gluten-Free Bread",
 ];
 
-const genAI = new GoogleGenerativeAI("your gemini ai api");
+const genAI = new GoogleGenerativeAI("your gemini api key");
 
 async function fetchImageAsBase64(url) {
   try {
@@ -48,18 +48,24 @@ function findKeywordMatch(title) {
   );
 }
 
-async function analyzeWithGemini(text, imageUrls) {
+async function analyzeWithGemini(text, imageUrls, question) {
   // console.log("Analyzing with text:", text);
   // console.log("Image URLs:", imageUrls);
 
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
- 
+  console.log("question:--",question);
+
+  // console.log(matchKey);
 
   let alternatives = [];
   if (matchKey) {
-    alternatives = await findNaturalAlternatives(matchKey);
-    // console.log("Found alternatives:", alternatives);
+    try {
+      alternatives = await findNaturalAlternatives(matchKey);
+      console.log("Found alternatives:", alternatives);
+    } catch (error) {
+      console.error("Error finding alternatives:", error);
+    }
   }
 
   let alternativesText =
@@ -83,7 +89,11 @@ async function analyzeWithGemini(text, imageUrls) {
                   Determine if the product is good for human health and the environment. 
                   Provide a brief analysis of its health impact, environmental impact, 
                   and social impact. Also, give healthy recommendation which user can use instead of harmful ingredient. Also provide the accurate proofs and accurate links to the research or the links to the source of your findings to support your response, don't give dummy links or the links which are not working anymore or have 404 on them, links must be at least 90% accurate. Don't be biased towards the user. after the title mention the one liner whether the product is safe or not adn then mention the rest. provide natural alternatives at the end and provide accurate links to the if possible only from websites: amazon.in, flipkart.com, blinkit.com, zepto,bigbasket. if you do not have correct link for alternate product then do not provide any link. Do not hallucinate.
-                  
+                  ${
+                    question
+                      ? `\n\nSpecific question from user: ${question}`
+                      : ""
+                  } 
                   Product Information:
                   ${text}`;
 
@@ -167,7 +177,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           return;
         }
 
-        analyzeWithGemini(response.text, response.images)
+        analyzeWithGemini(response.text, response.images, request.question)
           .then((result) => sendResponse({ result }))
           .catch((error) => sendResponse({ error: error.message }));
       });
